@@ -4,6 +4,7 @@ import xmlrpclib
 import base64
 import json
 
+from psycopg2.extensions import ISOLATION_LEVEL_READ_COMMITTED
 from lxml import etree
 
 from datetime import date, datetime
@@ -19,6 +20,10 @@ from ..core import get_proxy_args, VALID_OUTPUT_TYPES, DEFAULT_OUTPUT_TYPE
 
 class report_prompt_class(orm.TransientModel):
     _name = 'ir.actions.report.promptwizard'
+
+    def create(self, cr, user, vals, context=None):
+        cr._cnx.set_isolation_level(ISOLATION_LEVEL_READ_COMMITTED)
+        return super(report_prompt_class, self).create(cr, user, vals, context)
 
     def _multi_select_values(self, cr, uid, ids, field_name, args, context=None):
         mpwiz_obj = self.pool.get('ir.actions.report.multivalues.promptwizard')
@@ -467,3 +472,7 @@ class report_prompt_m2m(orm.TransientModel):
                 'sel_num': fields.float('Selection Number'),
                 'name': fields.char('Selection Value'),
                 }
+
+    def create(self, cr, user, vals, context=None):
+        cr._cnx.set_isolation_level(ISOLATION_LEVEL_READ_COMMITTED)
+        return super(report_prompt_m2m, self).create(cr, user, vals, context)
