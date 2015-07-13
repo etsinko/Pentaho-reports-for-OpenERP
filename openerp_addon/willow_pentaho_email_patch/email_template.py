@@ -84,6 +84,7 @@ class email_template_patch(osv.osv):
                     self._unlink_user_and_partner(crtemp, SUPERUSER_ID, existing_uids, context=ctx)
 
                 new_uid = user_obj.copy(crtemp, SUPERUSER_ID, uid, default={'employee_ids': False,
+                                                                            'invoice_ids': False,
                                                                             'message_ids': False,
                                                                             'name': user.name}, context=ctx)
                 crtemp.commit()
